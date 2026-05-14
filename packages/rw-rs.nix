@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script {};
 
   meta = {
+    broken = true;
     description = "Like sponge, but without the moreutils kitchen sink";
     homepage = "https://github.com/jridgewell/rw";
     license = lib.licenses.mit;
