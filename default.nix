@@ -9,15 +9,10 @@
 {pkgs ? import <nixpkgs> {}}: let
   inherit (pkgs) lib;
 
-  packages = let
-    dir = ./packages;
-    basename = lib.removeSuffix ".nix";
-
-    createPackage = file: _:
-      lib.nameValuePair
-      (basename file) (pkgs.callPackage (dir + /${file}) {});
-  in
-    lib.mapAttrs' createPackage (lib.readDir dir);
+  packages = lib.packagesFromDirectoryRecursive {
+    inherit (pkgs) callPackage;
+    directory = ./packages;
+  };
 in
   {
     # The `lib`, `overlays`, `nixosModules`, `homeModules`,
