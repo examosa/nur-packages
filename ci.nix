@@ -10,7 +10,6 @@
 # which this is possible.
 {pkgs ? import <nixpkgs> {}}: let
   inherit (pkgs) lib;
-  reserved = ["lib" "overlays" "nixosModules" "homeModules" "darwinModules" "flakeModules"];
 
   isBuildable = p: let
     licenseList = lib.flatten [p.meta.license or []];
@@ -18,6 +17,7 @@
     !(p.meta.broken or false) && lib.all lib.licenses.isFree licenseList;
 
   isCacheable = p: !(p.preferLocalBuild or false);
+
   shouldRecurseForDerivations = p: lib.isAttrs p && p.recurseForDerivations or false;
 
   flattenPkgs = s: let
@@ -32,10 +32,9 @@
 
   outputsOf = p: map (o: p.${o}) p.outputs;
 
-  nurAttrs = import ./default.nix {inherit pkgs;};
+  overlayAttrs = import ./overlay.nix pkgs pkgs;
 
-  nurPkgs =
-    flattenPkgs (lib.removeAttrs nurAttrs reserved);
+  nurPkgs = flattenPkgs overlayAttrs;
 
   buildPkgs = lib.filter isBuildable nurPkgs;
   cachePkgs = lib.filter isCacheable buildPkgs;
