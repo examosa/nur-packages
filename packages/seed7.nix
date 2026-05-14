@@ -56,14 +56,16 @@ stdenv.mkDerivation (finalAttrs: {
     "all"
   ];
 
-  makefile =
-    if stdenv.isDarwin
+  makefile = let
+    platform = stdenv.hostPlatform;
+  in
+    if platform.isDarwin
     then "mk_osx.mak"
-    else if stdenv.isOpenBSD
+    else if platform.isOpenBSD
     then "mk_freebsd.mk"
-    else if stdenv.isCygwin
+    else if platform.isCygwin
     then "mk_cygw.mak"
-    else if stdenv.isWindows
+    else if platform.isWindows
     then "mk_mingw.mak"
     else "makefile";
 
