@@ -19,6 +19,8 @@
         pkgs = nixpkgs.legacyPackages.${system};
       });
 
+    overlays = import ./overlays;
+
     packages = forAllSystems (system: lib.filterAttrs (_: lib.isDerivation) self.legacyPackages.${system});
   };
 }
