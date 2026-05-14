@@ -8,49 +8,39 @@
 #
 # then your CI will be able to build and cache only those packages for
 # which this is possible.
+{pkgs ? import <nixpkgs> {}}: let
+  inherit (pkgs) lib;
+  reserved = ["lib" "overlays" "nixosModules" "homeModules" "darwinModules" "flakeModules"];
 
-{ pkgs ? import <nixpkgs> { } }:
-
-with builtins;
-let
-  isReserved = n: n == "lib" || n == "overlays" || n == "nixosModules" || n == "homeModules" || n == "darwinModules" || n == "flakeModules";
-  isDerivation = p: isAttrs p && p ? type && p.type == "derivation";
   isBuildable = p: let
-    licenseFromMeta = p.meta.license or [];
-    licenseList = if builtins.isList licenseFromMeta then licenseFromMeta else [licenseFromMeta];
-  in !(p.meta.broken or false) && builtins.all (license: license.free or true) licenseList;
+    licenseList = lib.flatten [p.meta.license or []];
+  in
+    !(p.meta.broken or false) && lib.all lib.licenses.isFree licenseList;
+
   isCacheable = p: !(p.preferLocalBuild or false);
-  shouldRecurseForDerivations = p: isAttrs p && p.recurseForDerivations or false;
+  shouldRecurseForDerivations = p: lib.isAttrs p && p.recurseForDerivations or false;
 
-  nameValuePair = n: v: { name = n; value = v; };
-
-  concatMap = builtins.concatMap or (f: xs: concatLists (map f xs));
-
-  flattenPkgs = s:
-    let
-      f = p:
-        if shouldRecurseForDerivations p then flattenPkgs p
-        else if isDerivation p then [ p ]
-        else [ ];
-    in
-    concatMap f (attrValues s);
+  flattenPkgs = s: let
+    normalizePkg = p:
+      if shouldRecurseForDerivations p
+      then flattenPkgs p
+      else if lib.isDerivation p
+      then [p]
+      else [];
+  in
+    lib.concatMap normalizePkg (lib.attrValues s);
 
   outputsOf = p: map (o: p.${o}) p.outputs;
 
-  nurAttrs = import ./default.nix { inherit pkgs; };
+  nurAttrs = import ./default.nix {inherit pkgs;};
 
   nurPkgs =
-    flattenPkgs
-      (listToAttrs
-        (map (n: nameValuePair n nurAttrs.${n})
-          (filter (n: !isReserved n)
-            (attrNames nurAttrs))));
+    flattenPkgs (lib.removeAttrs nurAttrs reserved);
 
-in
-rec {
-  buildPkgs = filter isBuildable nurPkgs;
-  cachePkgs = filter isCacheable buildPkgs;
-
-  buildOutputs = concatMap outputsOf buildPkgs;
-  cacheOutputs = concatMap outputsOf cachePkgs;
+  buildPkgs = lib.filter isBuildable nurPkgs;
+  cachePkgs = lib.filter isCacheable buildPkgs;
+in {
+  inherit buildPkgs cachePkgs;
+  buildOutputs = lib.concatMap outputsOf buildPkgs;
+  cacheOutputs = lib.concatMap outputsOf cachePkgs;
 }
