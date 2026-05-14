@@ -11,5 +11,5 @@
   # `darwinModules` and `flakeModules` names are special
   overlays = import ./overlays; # nixpkgs overlays
 
-  example-package = pkgs.callPackage ./pkgs/example-package {};
+  example-package = pkgs.callPackage ./packages/example-package {};
 }
