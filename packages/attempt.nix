@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-ixMz5ZFq2WvwBcVHaxHnKWxAFYZ+/8BSaejSlGTW9/Y=";
   };
 
-  cargoHash = "sha256-ixMz5ZFq2WvwBcVHaxHnKWxAFYZ+_8BSaejSlGTW9_Y=";
+  cargoHash = "sha256-hxk97/DNM0febIJLXido6ejM1y3is0yx9MqmbdnmT0s=";
 
   # Not sure why these are failing but they're false positives
   checkFlags = [
