@@ -1,5 +1,5 @@
 {
-  emacs,
+  emacs-macport,
   fetchFromGitHub,
   lib,
   stdenv,
@@ -11,7 +11,7 @@
     hash = "sha256-7kML/eqQ6qqgirrXhALIS/Gt5s10wfS8cO3Y3pn/KJk=";
   };
 in
-  emacs.overrideAttrs (oldAttrs: {
+  emacs-macport.overrideAttrs (oldAttrs: {
     pname = "emacs-plus";
 
     patches =
