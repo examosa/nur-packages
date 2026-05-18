@@ -24,12 +24,18 @@ buildGoModule (finalAttrs: {
 
   checkFlags = let
     skippedTests = [
-      "(_extract|Install)Binary(|_Fail)"
-      "_readGithubSearchJSON"
-      "DownloadFile"
-      "NewGithub(Project|Search)"
+      "Test_extractBinary"
+      "Test_getGithubJSON"
+      "Test_getGithubSearchJSON"
+      "Test_readGithubJSON"
+      "Test_readGithubSearchJSON"
+      "TestDownloadFile"
+      "TestNewGithubProject"
+      "TestNewGithubSearch"
+      "TestInstallBinary"
+      "TestInstallBinary_Fail"
     ];
-  in ["-skip=^Test(${lib.concatStringsSep "|" skippedTests})$"];
+  in ["-skip=^(${lib.concatStringsSep "|" skippedTests})$"];
 
   passthru.updateScript = nix-update-script {};
 
