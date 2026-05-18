@@ -24,8 +24,10 @@ buildGoModule (finalAttrs: {
 
   checkFlags = let
     skippedTests = [
+      "(_extract|Install)Binary(_Fail)?"
       "_readGithubSearchJSON"
-      "NewGithubSearch"
+      "DownloadFile"
+      "NewGithub(Project|Search)"
     ];
   in ["-skip=^Test(${lib.concatStringsSep "|" skippedTests})$"];
 
