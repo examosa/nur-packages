@@ -6,6 +6,11 @@
     systems.url = "github:nix-systems/default";
   };
 
+  nixConfig = {
+    extra-substituters = ["https://examosa.cachix.org"];
+    extra-trusted-public-keys = ["examosa.cachix.org-1:ygyyHGQtFnPwyk31fWUOvGq0Z4J+cPCCMcwBFEJT8GA="];
+  };
+
   outputs = {
     self,
     nixpkgs,
