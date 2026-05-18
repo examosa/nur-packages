@@ -5,6 +5,7 @@
   cmakeMinimal,
   gitMinimal,
   pkg-config,
+  rustc,
   zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -43,6 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
+    broken = !(lib.versionAtLeast rustc.version "1.93");
     description = "A fast Node.js package manager";
     homepage = "https://github.com/endevco/aube";
     changelog = "https://github.com/endevco/aube/blob/${finalAttrs.src.rev}/CHANGELOG.md";
