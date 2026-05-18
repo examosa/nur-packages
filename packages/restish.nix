@@ -1,9 +1,10 @@
 {
+  buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
   lib,
   nix-update-script,
-  buildGoModule,
-  installShellFiles,
+  stdenv,
 }:
 buildGoModule (finalAttrs: {
   pname = "restish";
@@ -39,6 +40,7 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script {};
 
   meta = {
+    broken = stdenv.hostPlatform.isLinux;
     description = "A CLI for interacting with REST-ish HTTP APIs with some nice features built-in";
     longDescription = ''
       Restish is a CLI for interacting with REST-ish HTTP APIs with some nice features built-in,
