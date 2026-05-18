@@ -18,9 +18,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-0zvpcvypUhWp0nqHsj8vUSEwFOnCiAGIpMP3Neraugg=";
   };
 
-  # cargoHash = "sha256-0zvpcvypUhWp0nqHsj8vUSEwFOnCiAGIpMP3Neraugg=";
-  # Using vendored Cargo.lock because fetchCargoDeps can't parse v1 format
-  cargoLock.lockFile = ./Cargo.lock;
+  cargoHash = "sha256-/Jk8QUnUyrhEDAzbb7uQ2zQ5cshROHGd+iTMam0RjZE=";
+  cargoPatches = [./Cargo.lock.patch];
 
   passthru.updateScript = nix-update-script {};
 
