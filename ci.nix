@@ -34,7 +34,7 @@
 
   outputsOf = p: map (o: p.${o}) p.outputs;
 
-  overlayAttrs = import ./overlay.nix pkgs pkgs;
+  overlayAttrs = (import ./overlays).default pkgs pkgs;
 
   nurPkgs = flattenPkgs overlayAttrs;
 
