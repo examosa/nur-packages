@@ -35,6 +35,4 @@ in
     configureFlags =
       oldAttrs.configureFlags
       ++ lib.optionals stdenv.hostPlatform.isDarwin ["ac_cv_prog_cc_c23=no"];
-
-    meta.platforms = lib.platforms.darwin;
   })
