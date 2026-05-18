@@ -19,14 +19,11 @@ jobs:
   tests:
     strategy:
       matrix:
-        nurRepo:
-          - examosa
-        cachixName:
-          - examosa
         nixPath:
           - nixpkgs=channel:nixpkgs-unstable
           - nixpkgs=channel:nixos-unstable
           - nixpkgs=channel:nixos-25.11
+
     runs-on: ubuntu-latest
 
     steps:
@@ -47,17 +44,17 @@ jobs:
       - name: Setup cachix
         uses: cachix/cachix-action@v16
         with:
-          name: ${{ matrix.cachixName }}
+          name: ${{ github.repository_owner }}
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: Check evaluation
-        run: |
-          nix-env -f . -qa \* --meta --xml \
-            --allowed-uris https://static.rust-lang.org \
-            --option restrict-eval true \
-            --option allow-import-from-derivation true \
-            --drv-path --show-trace \
-            -I nixpkgs=$(nix-instantiate --find-file nixpkgs) \
+        run: >-
+          nix-env -f . -qa \* --meta --xml
+            --allowed-uris https://static.rust-lang.org
+            --option restrict-eval true
+            --option allow-import-from-derivation true
+            --drv-path --show-trace
+            -I nixpkgs=$(nix-instantiate --find-file nixpkgs)
             -I $PWD
 
       - name: Build nix packages
@@ -67,4 +64,4 @@ jobs:
       - name: Trigger NUR update
         if: ${{ false }}
         run: curl -X POST "https://nur-update.nix-community.org/update?repo=${{
-          matrix.nurRepo }}"
+          github.repository_owner }}"
