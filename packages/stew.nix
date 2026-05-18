@@ -3,6 +3,7 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
+  stdenv,
 }:
 buildGoModule (finalAttrs: {
   pname = "stew";
@@ -40,6 +41,7 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script {};
 
   meta = {
+    broken = stdenv.hostPlatform.isLinux;
     description = "An independent package manager for compiled binaries";
     homepage = "https://github.com/marwanhawari/stew";
     license = lib.licenses.mit;
