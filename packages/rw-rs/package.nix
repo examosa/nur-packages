@@ -19,13 +19,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   # cargoHash = "sha256-0zvpcvypUhWp0nqHsj8vUSEwFOnCiAGIpMP3Neraugg=";
-  # Using IFD as workaround for unsupported v1 Cargo.lock
-  cargoLock.lockFile = finalAttrs.src + /Cargo.lock;
+  # Using vendored Cargo.lock because fetchCargoDeps can't parse v1 format
+  cargoLock.lockFile = ./Cargo.lock;
 
   passthru.updateScript = nix-update-script {};
 
   meta = {
-    broken = true;
     description = "Like sponge, but without the moreutils kitchen sink";
     homepage = "https://github.com/jridgewell/rw";
     license = lib.licenses.mit;
