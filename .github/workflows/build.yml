@@ -24,9 +24,9 @@ jobs:
         cachixName:
           - examosa
         nixPath:
-          - nixpkgs=https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz
-          - nixpkgs=https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz
-          - nixpkgs=https://channels.nixos.org/nixos-25.11/nixexprs.tar.xz
+          - nixpkgs=channel:nixpkgs-unstable
+          - nixpkgs=channel:nixos-unstable
+          - nixpkgs=channel:nixos-25.11
     runs-on: ubuntu-latest
 
     steps:
