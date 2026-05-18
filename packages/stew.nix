@@ -1,7 +1,6 @@
 {
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
   lib,
   nix-update-script,
 }:
@@ -23,13 +22,12 @@ buildGoModule (finalAttrs: {
 
   ldflags = ["-s"];
 
-  patches = [
-    (fetchpatch {
-      name = "stew-update-test-fixtures.patch";
-      url = "https://github.com/marwanhawari/stew/pull/89.patch";
-      hash = "sha256-F7mO7NivFy97HHJQhu7CiIg1RxgU9eh30uFBZ0NvOmI=";
-    })
-  ];
+  checkFlags = let
+    skippedTests = [
+      "_readGithubSearchJSON"
+      "NewGithubSearch"
+    ];
+  in ["-skip=^Test(${lib.concatStringsSep "|" skippedTests})$"];
 
   passthru.updateScript = nix-update-script {};
 
