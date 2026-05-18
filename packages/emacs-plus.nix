@@ -1,5 +1,5 @@
 {
-  emacs-macport,
+  emacs-unstable,
   fetchFromGitHub,
   lib,
   stdenv,
@@ -11,8 +11,8 @@
     hash = "sha256-7kML/eqQ6qqgirrXhALIS/Gt5s10wfS8cO3Y3pn/KJk=";
   };
 in
-  emacs-macport.overrideAttrs (oldAttrs: {
-    pname = "emacs-plus";
+  emacs-unstable.overrideAttrs (oldAttrs: {
+    name = lib.replaceString "unstable" "plus" oldAttrs.name;
 
     patches =
       oldAttrs.patches

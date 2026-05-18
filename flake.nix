@@ -3,6 +3,12 @@
 
   inputs = {
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";
+
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     systems.url = "github:nix-systems/default";
   };
 
@@ -14,6 +20,7 @@
   outputs = {
     self,
     nixpkgs,
+    emacs-overlay,
     systems,
   }: let
     inherit (nixpkgs) lib;
@@ -21,7 +28,7 @@
   in {
     legacyPackages = forAllSystems (system:
       import ./default.nix {
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = nixpkgs.legacyPackages.${system}.extend emacs-overlay.overlays.emacs;
       });
 
     overlays = import ./overlays;
