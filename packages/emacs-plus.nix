@@ -1,5 +1,5 @@
 {
-  emacs-unstable,
+  emacs,
   fetchFromGitHub,
   lib,
   stdenv,
@@ -11,8 +11,8 @@
     hash = "sha256-7kML/eqQ6qqgirrXhALIS/Gt5s10wfS8cO3Y3pn/KJk=";
   };
 in
-  emacs-unstable.overrideAttrs (oldAttrs: {
-    name = lib.replaceString "unstable" "plus" oldAttrs.name;
+  emacs.overrideAttrs (oldAttrs: {
+    pname = "emacs-plus";
 
     patches =
       oldAttrs.patches
