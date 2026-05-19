@@ -2,8 +2,8 @@
 
 **My personal [NUR](https://github.com/nix-community/NUR) repository**
 
-![Build and populate cache](https://github.com/examosa/nur-packages/workflows/Build%20and%20populate%20cache/badge.svg)
+[![Built with Nix](https://builtwithnix.org/badge.svg)](https://builtwithnix.org)
 
-<!-- Todo
-[![Cachix Cache](https://img.shields.io/badge/cachix-<YOUR_CACHIX_CACHE_NAME>-blue.svg)](https://<YOUR_CACHIX_CACHE_NAME>.cachix.org)
--->
+[![Build and populate cache](https://github.com/examosa/nur-packages/actions/workflows/build.yml/badge.svg)](https://github.com/examosa/nur-packages/actions/workflows/build.yml)
+
+[![Cachix Cache](https://img.shields.io/badge/cachix-examosa-%233a5ca1.svg)](https://examosa.cachix.org)
