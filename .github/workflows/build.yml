@@ -39,7 +39,7 @@ jobs:
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
       - name: Show nixpkgs version
-        run: nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'
+        run: nix eval --impure --raw --expr '(import <nixpkgs> {}).lib.version'
 
       - name: Setup cachix
         uses: cachix/cachix-action@v17
