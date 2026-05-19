@@ -7,8 +7,15 @@
   };
 
   nixConfig = {
-    extra-substituters = ["https://examosa.cachix.org"];
-    extra-trusted-public-keys = ["examosa.cachix.org-1:ygyyHGQtFnPwyk31fWUOvGq0Z4J+cPCCMcwBFEJT8GA="];
+    extra-substituters = [
+      "https://examosa.cachix.org"
+      "https://nix-community.cachix.org"
+    ];
+
+    extra-trusted-public-keys = [
+      "examosa.cachix.org-1:ygyyHGQtFnPwyk31fWUOvGq0Z4J+cPCCMcwBFEJT8GA="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
   };
 
   outputs = {
