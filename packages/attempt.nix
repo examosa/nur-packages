@@ -20,6 +20,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-hxk97/DNM0febIJLXido6ejM1y3is0yx9MqmbdnmT0s=";
 
+  postPatch = ''
+    substituteInPlace src/main.rs tests/e2e.rs \
+      --replace-fail '/bin/true' '${lib.getExe' coreutils "true"}' \
+      --replace-fail '/bin/false' '${lib.getExe' coreutils "false"}' \
+  '';
+
   # Not sure why these are failing but they're false positives
   checkFlags = [
     "--skip=forever_runs_more_than_once"
@@ -29,12 +35,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=staggering"
     "--skip=timeouts_are_respected"
   ];
-
-  preCheck = ''
-    substituteInPlace src/main.rs tests/e2e.rs \
-      --replace-fail '/bin/true' '${lib.getExe' coreutils "true"}' \
-      --replace-fail '/bin/false' '${lib.getExe' coreutils "false"}' \
-  '';
 
   passthru.updateScript = nix-update-script {};
 
