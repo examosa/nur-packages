@@ -3,9 +3,11 @@
   rustPlatform,
   fetchFromGitHub,
   cmakeMinimal,
+  installShellFiles,
   gitMinimal,
   pkg-config,
   rustc,
+  usage,
   zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,6 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     cmakeMinimal
+    installShellFiles
     pkg-config
   ];
 
@@ -35,6 +38,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace ./crates/aube-lockfile/src/lib.rs \
       --replace-fail '"git"' '"${lib.getExe gitMinimal}"'
+
+    substituteInPlace ./crates/aube/src/commands/completion.rs \
+      --replace-fail '"usage"' '"${lib.getExe usage}"'
+  '';
+
+  postInstall = ''
+    installShellCompletion --cmd aube \
+      --bash <($out/bin/aube completion bash) \
+      --fish <($out/bin/aube completion fish) \
+      --zsh <($out/bin/aube completion zsh)
   '';
 
   env = {
