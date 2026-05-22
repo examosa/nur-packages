@@ -32,18 +32,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zstd
   ];
 
-  nativeCheckInputs = [
-    # Necessary for a test that invokes git
-    # https://github.com/endevco/aube/blob/v1.9.1/crates/aube-lockfile/src/lib.rs#L2221
-    gitMinimal
-  ];
+  postPatch = ''
+    substituteInPlace ./crates/aube-lockfile/src/lib.rs \
+      --replace-fail '"git"' '"${lib.getExe gitMinimal}"'
+  '';
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
   meta = {
-    broken = !(lib.versionAtLeast rustc.version "1.93");
+    broken = lib.versionOlder rustc.version "1.93";
     description = "A fast Node.js package manager";
     homepage = "https://github.com/endevco/aube";
     changelog = "https://github.com/endevco/aube/blob/${finalAttrs.src.rev}/CHANGELOG.md";
