@@ -12,7 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aube";
   version = "1.9.1";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {

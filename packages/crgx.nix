@@ -8,7 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "crgx";
   version = "0.1.0";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {

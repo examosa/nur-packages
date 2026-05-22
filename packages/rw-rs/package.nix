@@ -8,7 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rw-rs";
   version = "1.0.1";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
