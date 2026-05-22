@@ -1,11 +1,13 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
   pkg-config,
   dbus,
+  udev,
   openssl,
   usage,
 }:
@@ -32,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     dbus
     openssl
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isLinux udev;
 
   postPatch = ''
     substituteInPlace ./src/commands/completion.rs \
