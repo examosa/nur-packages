@@ -15,8 +15,14 @@ on:
 
   workflow_dispatch:
 
+concurrency:
+  group: "ci-${{ github.ref_name }}"
+  cancel-in-progress: true
+
 jobs:
   tests:
+    timeout-minutes: 90
+
     strategy:
       matrix:
         nixPath:
@@ -28,8 +34,8 @@ jobs:
           - ubuntu-latest
 
         include:
-          - os: macos-latest
-            nixPath: nixpkgs=channel:nixpkgs-unstable
+          - nixPath: nixpkgs=channel:nixpkgs-unstable
+            os: macos-latest
 
     runs-on: "${{ matrix.os }}"
 
@@ -65,8 +71,7 @@ jobs:
             -I $PWD
 
       - name: Build nix packages
-        run:
-          nix shell -f '<nixpkgs>' nix-build-uncached -c nix-build-uncached ci.nix -A
+        run: nix shell -f '<nixpkgs>' nix-build-uncached -c nix-build-uncached ci.nix -A
           cacheOutputs
 
       - name: Trigger NUR update
