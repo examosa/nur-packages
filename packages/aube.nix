@@ -40,17 +40,29 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"git"' '"${lib.getExe gitMinimal}"'
 
     substituteInPlace ./crates/aube/src/commands/completion.rs \
-      --replace-fail '"usage"' '"${lib.getExe usage}"'
+      --replace-fail '"usage"' "\"$JDX_USAGE_BIN\""
   '';
 
   postInstall = ''
-    installShellCompletion --cmd aube \
-      --bash <($out/bin/aube completion bash) \
-      --fish <($out/bin/aube completion fish) \
-      --zsh <($out/bin/aube completion zsh)
+    completions=(--cmd aube)
+
+    for shell in {ba,fi,z}sh; do
+      completion=aube.$shell
+
+      $JDX_USAGE_BIN generate completion $shell aube \
+        --file aube.usage.kdl > $completion
+
+      completions+=(--$shell $completion)
+    done
+
+    installShellCompletion "''${completions[@]}"
+
+    $JDX_USAGE_BIN generate manpage --file aube.usage.kdl --out-file aube.1
+    installManPage aube.1
   '';
 
   env = {
+    JDX_USAGE_BIN = lib.getExe usage;
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 

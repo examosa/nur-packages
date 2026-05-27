@@ -31,24 +31,38 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    dbus
-    openssl
-  ] ++ lib.optional stdenv.hostPlatform.isLinux udev;
+  buildInputs =
+    [
+      dbus
+      openssl
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux udev;
 
   postPatch = ''
     substituteInPlace ./src/commands/completion.rs \
-      --replace-fail '"usage"' '"${lib.getExe usage}"'
+      --replace-fail '"usage"' "\"$JDX_USAGE_BIN\""
   '';
 
   postInstall = ''
-    installShellCompletion --cmd fnox \
-      --bash <($out/bin/fnox completion bash) \
-      --fish <($out/bin/fnox completion fish) \
-      --zsh <($out/bin/fnox completion zsh)
+    completions=(--cmd fnox)
+
+    for shell in {ba,fi,z}sh; do
+      completion=fnox.$shell
+
+      $JDX_USAGE_BIN generate completion $shell fnox \
+        --file fnox.usage.kdl > $completion
+
+      completions+=(--$shell $completion)
+    done
+
+    installShellCompletion "''${completions[@]}"
+
+    $JDX_USAGE_BIN generate manpage --file fnox.usage.kdl --out-file fnox.1
+    installManPage fnox.1
   '';
 
   env = {
+    JDX_USAGE_BIN = lib.getExe usage;
     OPENSSL_NO_VENDOR = true;
   };
 
