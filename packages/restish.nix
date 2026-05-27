@@ -8,7 +8,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "restish";
-  version = "0.21.2";
+  version = "2.0.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -17,10 +17,10 @@ buildGoModule (finalAttrs: {
     owner = "rest-sh";
     repo = "restish";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C+fB9UeEq+h6SlBtVPPZWs5fCCsJVe/TJFy4KhhaItU=";
+    hash = "sha256-4piN0W/9y2NTsTuZ2B4Czhr9RQNb4eT9ZIX9MYzfMLI=";
   };
 
-  vendorHash = "sha256-5+N6iL9wD5J/E6H5qn1InQR8bbuAlTOzPQn0sawVbrI=";
+  vendorHash = "sha256-ZRyGCdmPenOeLtFuj0howJH0rah05sPUuD7RH/c0LKI=";
 
   ldflags = ["-s" "-w" "-X main.version=${finalAttrs.version}"];
 
