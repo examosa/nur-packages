@@ -11,7 +11,7 @@ on:
     # rebuild everyday at 2:51
     # TIP: Choose a random time here so not all repositories are build at once:
     # https://www.random.org/clock-times/?num=1&earliest=01%3A00&latest=08%3A00&interval=5&format=html&rnd=new
-    - cron: '51 2 * * *'
+    - cron: "51 2 * * *"
 
   workflow_dispatch:
 
@@ -24,7 +24,14 @@ jobs:
           - nixpkgs=channel:nixos-unstable
           - nixpkgs=channel:nixos-25.11
 
-    runs-on: ubuntu-latest
+        os:
+          - ubuntu-latest
+
+        include:
+          - os: macos-latest
+            nixPath: nixpkgs=channel:nixpkgs-unstable
+
+    runs-on: "${{ matrix.os }}"
 
     steps:
       - name: Checkout repository
@@ -58,7 +65,8 @@ jobs:
             -I $PWD
 
       - name: Build nix packages
-        run: nix shell -f '<nixpkgs>' nix-build-uncached -c nix-build-uncached ci.nix -A
+        run:
+          nix shell -f '<nixpkgs>' nix-build-uncached -c nix-build-uncached ci.nix -A
           cacheOutputs
 
       - name: Trigger NUR update
