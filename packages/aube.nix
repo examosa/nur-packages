@@ -44,6 +44,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
+    rm -fv $out/bin/generate-settings-docs
+
     completions=(--cmd aube)
 
     for shell in {ba,fi,z}sh; do
