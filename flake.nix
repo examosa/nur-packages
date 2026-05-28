@@ -5,6 +5,11 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";
     systems.url = "github:nix-systems/default";
+
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   nixConfig = {
@@ -28,15 +33,24 @@
     flake-parts.lib.mkFlake {inherit inputs;} {
       systems = import systems;
 
+      imports = [inputs.treefmt-nix.flakeModule];
+
       perSystem = {
+        config,
         lib,
         pkgs,
         ...
       }: let
         legacyPackages = import self {inherit pkgs;};
       in {
+        checks.format = config.treefmt.build.check self;
         inherit legacyPackages;
         packages = lib.filterAttrs (_: lib.isDerivation) legacyPackages;
+
+        treefmt = {
+          projectRootFile = "flake.nix";
+          programs.alejandra.enable = true;
+        };
       };
 
       flake.overlays = import ./overlays;
