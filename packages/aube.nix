@@ -43,6 +43,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"usage"' "\"$JDX_USAGE_BIN\""
   '';
 
+  # tests mutate AUBE_DISABLE_TLS_TICKET_CACHE and assume serial execution
+  dontUseCargoParallelTests = true;
+
   postInstall = ''
     rm -fv $out/bin/generate-settings-docs
 
