@@ -2,6 +2,7 @@
   description = "My personal NUR repository";
 
   inputs = {
+    flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";
     systems.url = "github:nix-systems/default";
   };
@@ -18,21 +19,26 @@
     ];
   };
 
-  outputs = {
-    self,
-    nixpkgs,
+  outputs = inputs @ {
+    flake-parts,
     systems,
-  }: let
-    inherit (nixpkgs) lib;
-    forAllSystems = lib.genAttrs (import systems);
-  in {
-    legacyPackages = forAllSystems (system:
-      import ./default.nix {
-        pkgs = nixpkgs.legacyPackages.${system};
-      });
+    self,
+    ...
+  }:
+    flake-parts.lib.mkFlake {inherit inputs;} {
+      systems = import systems;
 
-    overlays = import ./overlays;
+      perSystem = {
+        lib,
+        pkgs,
+        ...
+      }: let
+        legacyPackages = import self {inherit pkgs;};
+      in {
+        inherit legacyPackages;
+        packages = lib.filterAttrs (_: lib.isDerivation) legacyPackages;
+      };
 
-    packages = forAllSystems (system: lib.filterAttrs (_: lib.isDerivation) self.legacyPackages.${system});
-  };
+      flake.overlays = import ./overlays;
+    };
 }
