@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace ./crates/aube-lockfile/src/lib.rs \
+    substituteInPlace ./crates/aube-lockfile/src/io.rs \
       --replace-fail '"git"' '"${lib.getExe gitMinimal}"'
 
     substituteInPlace ./crates/aube/src/commands/completion.rs \
