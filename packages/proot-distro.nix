@@ -1,14 +1,14 @@
 {
-  buildPythonApplication,
   fetchFromGitHub,
   installShellFiles,
   lib,
   proot,
+  python3Packages,
   qemu,
   setuptools,
   withQemu ? false,
 }:
-buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "proot-distro";
   version = "5.1.2";
   pyproject = true;
