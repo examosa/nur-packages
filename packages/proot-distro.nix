@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "termux";
     repo = "proot-distro";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-z20af/J7zueIGHFqa+/t2kRfDpCwR7WeTj7ZFhCS1PQ=";
+    hash = "sha256-EnyIoCktHzg+o3NReOW6hTuS+vSyjPehN8NlKNc0GWM=";
   };
 
   nativeBuildInputs = [installShellFiles];
