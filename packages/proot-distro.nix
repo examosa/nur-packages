@@ -6,6 +6,7 @@
   makeWrapper,
   proot,
   qemu,
+  setuptools,
   withQemu ? false,
 }:
 buildPythonApplication (finalAttrs: {
@@ -23,6 +24,8 @@ buildPythonApplication (finalAttrs: {
   nativeBuildInputs = [makeWrapper installShellFiles];
 
   propagatedBuildInputs = [proot] ++ lib.optional withQemu qemu;
+
+  build-system = [setuptools];
 
   # no tests
   doCheck = false;
