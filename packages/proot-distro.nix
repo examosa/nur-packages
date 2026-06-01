@@ -5,7 +5,6 @@
   proot,
   python3Packages,
   qemu,
-  setuptools,
   withQemu ? false,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -26,7 +25,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   propagatedBuildInputs = [proot] ++ lib.optional withQemu qemu;
 
-  build-system = [setuptools];
+  build-system = [python3Packages.setuptools];
 
   # no tests
   doCheck = false;
