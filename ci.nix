@@ -13,10 +13,9 @@
 
   isBuildable = p: let
     isFree = let
-      isFree' = lib.licenses.isFree or (l: l.free or true);
       licenseList = lib.flatten [p.meta.license or []];
     in
-      lib.all isFree' licenseList;
+      lib.all lib.licenses.isFree licenseList;
 
     isSupportedPlatform = lib.meta.availableOn pkgs.stdenv.hostPlatform p;
 
