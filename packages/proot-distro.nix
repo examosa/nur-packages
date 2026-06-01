@@ -11,6 +11,7 @@
 buildPythonApplication (finalAttrs: {
   pname = "proot-distro";
   version = "5.1.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "termux";
@@ -23,14 +24,10 @@ buildPythonApplication (finalAttrs: {
 
   propagatedBuildInputs = [proot] ++ lib.optional withQemu qemu;
 
-  doCheck = true;
-  checkPhase = ''
-    python -c '
-      import importlib, sys
-      importlib.import_module("proot_distro")
-      print("import ok", file=sys.stderr)
-    '
-  '';
+  # no tests
+  doCheck = false;
+
+  pythonImportsCheck = ["proot_distro"];
 
   postInstall =
     ''
