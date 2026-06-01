@@ -3,7 +3,6 @@
   fetchFromGitHub,
   installShellFiles,
   lib,
-  makeWrapper,
   proot,
   qemu,
   setuptools,
@@ -14,6 +13,8 @@ buildPythonApplication (finalAttrs: {
   version = "5.1.2";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "termux";
     repo = "proot-distro";
@@ -21,7 +22,7 @@ buildPythonApplication (finalAttrs: {
     hash = "sha256-z20af/J7zueIGHFqa+/t2kRfDpCwR7WeTj7ZFhCS1PQ=";
   };
 
-  nativeBuildInputs = [makeWrapper installShellFiles];
+  nativeBuildInputs = [installShellFiles];
 
   propagatedBuildInputs = [proot] ++ lib.optional withQemu qemu;
 
@@ -32,18 +33,18 @@ buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = ["proot_distro"];
 
-  postInstall =
-    ''
-      installShellCompletion \
-        proot_distro/completions/proot-distro.{ba,fi}sh \
-        --zsh proot_distro/completions/_proot-distro
-    ''
-    + lib.optionalString withQemu ''
-      for prog in $out/bin/{pd,proot-distro}; do
-        [[ -x "$prog" ]] &&
-          wrapProgram "$prog" --prefix PATH : ${lib.makeBinPath [qemu]}
-      done
-    '';
+  makeWrapperArgs = lib.optionals withQemu [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath qemu)
+  ];
+
+  postInstall = ''
+    installShellCompletion \
+      proot_distro/completions/proot-distro.{ba,fi}sh \
+      --zsh proot_distro/completions/_proot-distro
+  '';
 
   meta = {
     description = "A utility for managing installations of the Linux distributions in Termux";
