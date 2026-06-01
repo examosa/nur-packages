@@ -11,12 +11,18 @@
 {pkgs ? import <nixpkgs> {}}: let
   inherit (pkgs) lib;
 
-  isFree = lib.licenses.isFree or (l: l.free or true);
-
   isBuildable = p: let
-    licenseList = lib.flatten [p.meta.license or []];
+    isFree = let
+      isFree' = lib.licenses.isFree or (l: l.free or true);
+      licenseList = lib.flatten [p.meta.license or []];
+    in
+      lib.all isFree' licenseList;
+
+    isSupportedPlatform = lib.meta.availableOn pkgs.stdenv.hostPlatform p;
+
+    isWorking = !(p.meta.broken or false);
   in
-    !(p.meta.broken or false) && lib.all isFree licenseList;
+    isFree && isSupportedPlatform && isWorking;
 
   isCacheable = p: !(p.preferLocalBuild or false);
 
