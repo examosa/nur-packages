@@ -1,14 +1,14 @@
-{ stdenv
-, fetchFromGitHub
-, python3Packages
-, proot
-, lib
-, qemu
-, makeWrapper
-, installShellFiles
-, withQemu ? false
+{
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  makeWrapper,
+  proot,
+  python3Packages,
+  qemu,
+  stdenv,
+  withQemu ? false,
 }:
-
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "proot-distro";
   version = "5.1.2";
@@ -20,33 +20,35 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-z20af/J7zueIGHFqa+/t2kRfDpCwR7WeTj7ZFhCS1PQ=";
   };
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [makeWrapper installShellFiles];
 
-  propagatedBuildInputs = [ proot ] ++ lib.optional withQemu qemu;
+  propagatedBuildInputs = [proot] ++ lib.optional withQemu qemu;
 
   doCheck = true;
   checkPhase = ''
-    python -c 'import importlib, sys; importlib.import_module("proot_distro"); print("import ok", file=sys.stderr)'
+    python -c '
+      import importlib, sys
+      importlib.import_module("proot_distro")
+      print("import ok", file=sys.stderr)
+    '
   '';
 
-  postInstall = ''
-    if [ -d "./proot_distro/completions" ]; then
+  postInstall =
+    ''
       installShellCompletion \
-        --bash "./proot_distro/completions/proot-distro.bash" \
-        --zsh  "./proot_distro/completions/_proot-distro" \
-        --fish "./proot_distro/completions/proot-distro.fish"
-    fi
-  '' + lib.optionalString withQemu ''
-    wrapProgram "$out/bin/proot-distro" --prefix PATH : "${qemu}/bin"
-    if [ -x "$out/bin/pd" ]; then
-      wrapProgram "$out/bin/pd" --prefix PATH : "${qemu}/bin"
-    fi
-  '';
+        proot_distro/completions/proot-distro.{ba,fi}sh \
+        --zsh  proot_distro/completions/_proot-distro
+    ''
+    + lib.optionalString withQemu ''
+      for prog in $out/bin/{pd,proot-distro}; do
+        [[ -x "$prog" ]] &&
+          wrapProgram "$prog" --prefix PATH : ${lib.makeBinPath [qemu]}
+      done
+    '';
 
   meta = {
     description = "PRoot-Distro — lightweight rootless Linux container manager built around proot";
     homepage = "https://github.com/termux/proot-distro";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
   };
 })
