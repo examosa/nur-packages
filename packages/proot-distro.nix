@@ -58,5 +58,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     '';
     homepage = "https://github.com/termux/proot-distro";
     license = lib.licenses.gpl3Only;
+    inherit (proot.meta) platforms;
   };
 })
