@@ -5,6 +5,7 @@
   cmakeMinimal,
   installShellFiles,
   gitMinimal,
+  cacert,
   pkg-config,
   rustc,
   usage,
@@ -26,6 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-lMN2Lpp89979+8TdZuBdnFDlSSeEJ7neFFqeixX0L1w=";
 
   nativeBuildInputs = [
+    cacert
     cmakeMinimal
     installShellFiles
     pkg-config
