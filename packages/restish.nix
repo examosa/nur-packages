@@ -4,23 +4,21 @@
   installShellFiles,
   lib,
   nix-update-script,
-  stdenv,
 }:
 buildGoModule (finalAttrs: {
   pname = "restish";
-  version = "2.0.0";
+  version = "2.1.2";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rest-sh";
     repo = "restish";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4piN0W/9y2NTsTuZ2B4Czhr9RQNb4eT9ZIX9MYzfMLI=";
+    hash = "sha256-TjU/pkjK1kbCmXeXds61NLo8kHigZNsUKXxX9m0tRHY=";
   };
 
-  vendorHash = "sha256-ZRyGCdmPenOeLtFuj0howJH0rah05sPUuD7RH/c0LKI=";
+  vendorHash = "sha256-Y0GwgrkD09WAlmyI6Oe3Kw6L62E7QRTCIThZGXbbn74=";
 
   ldflags = ["-s" "-w" "-X main.version=${finalAttrs.version}"];
 
@@ -32,20 +30,19 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     installShellCompletion --cmd restish \
-      --bash <($out/bin/restish completion bash) \
-      --fish <($out/bin/restish completion fish) \
-      --zsh <($out/bin/restish completion zsh)
+      --bash <($out/bin/restish shell completion bash) \
+      --fish <($out/bin/restish shell completion fish) \
+      --zsh <($out/bin/restish shell completion zsh)
   '';
 
   passthru.updateScript = nix-update-script {};
 
   meta = {
-    broken = stdenv.hostPlatform.isLinux;
     description = "A CLI for interacting with REST-ish HTTP APIs with some nice features built-in";
     longDescription = ''
-      Restish is a CLI for interacting with REST-ish HTTP APIs with some nice features built-in,
-      like always having the latest API resources, fields, and operations available when they go
-      live on the API without needing to install or update anything.
+      Restish is a CLI for working with REST-ish HTTP APIs.
+      It can make generic HTTP requests, discover OpenAPI descriptions, generate API-aware commands,
+      manage profiles and auth, render structured output, follow pagination links, and run plugins.
     '';
     homepage = "https://rest.sh/";
     changelog = "https://github.com/danielgtaylor/restish/releases/tag/${finalAttrs.version}";
