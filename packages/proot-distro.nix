@@ -9,7 +9,7 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "proot-distro";
-  version = "5.1.2";
+  version = "5.1.4";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "termux";
     repo = "proot-distro";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EnyIoCktHzg+o3NReOW6hTuS+vSyjPehN8NlKNc0GWM=";
+    hash = "sha256-GgeXbSTKVbpl/+Lo28iuJ4VDoV9TxYxiHZwxoeidw8A=";
   };
 
   nativeBuildInputs = [installShellFiles];
