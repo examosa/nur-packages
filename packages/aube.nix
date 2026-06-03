@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-lMN2Lpp89979+8TdZuBdnFDlSSeEJ7neFFqeixX0L1w=";
 
   nativeBuildInputs = [
-    cacert
     cmakeMinimal
     installShellFiles
     pkg-config
@@ -44,6 +43,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace ./crates/aube/src/commands/completion.rs \
       --replace-fail '"usage"' "\"$JDX_USAGE_BIN\""
   '';
+
+  nativeCheckInputs = [
+    cacert
+  ];
 
   # tests mutate AUBE_DISABLE_TLS_TICKET_CACHE and assume serial execution
   dontUseCargoParallelTests = true;
