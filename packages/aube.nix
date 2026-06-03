@@ -13,7 +13,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "aube";
-  version = "1.16.0";
+  version = "1.17.1";
 
   __structuredAttrs = true;
 
@@ -21,10 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "endevco";
     repo = "aube";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rkpLdv1Qyn2AhnnGuFQZHhnxVWceXCEv1O+a4ifGI00=";
+    hash = "sha256-OClcTZCirRxfD20DeFo5HGKOKulJY+fDnsuwo/TkdnA=";
   };
 
-  cargoHash = "sha256-lMN2Lpp89979+8TdZuBdnFDlSSeEJ7neFFqeixX0L1w=";
+  cargoHash = "sha256-NMAaQumpbP/BbTeBp+nCvZds527D8gfnOFXXzR1MVXo=";
 
   nativeBuildInputs = [
     cmakeMinimal
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     rm -fv $out/bin/generate-settings-docs
 
-    completions=(--cmd aube)
+    completions=()
 
     for shell in {ba,fi,z}sh; do
       completion=aube.$shell
@@ -62,7 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       $JDX_USAGE_BIN generate completion $shell aube \
         --file aube.usage.kdl > $completion
 
-      completions+=(--$shell $completion)
+      completions+=($completion)
     done
 
     installShellCompletion "''${completions[@]}"
