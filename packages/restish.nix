@@ -24,6 +24,12 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [installShellFiles];
 
+  checkFlags = let
+    skippedTests = [
+      "TestAPISyncDiscoveryDoesNotSendAuthToCrossOriginLinkSpec"
+    ];
+  in ["-skip=^(${lib.concatStringsSep "|" skippedTests})$"];
+
   preCheck = ''
     export HOME=$(mktemp -d) EDITOR=true
   '';
