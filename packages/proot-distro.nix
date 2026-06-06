@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "--prefix"
     "PATH"
     ":"
-    (lib.makeBinPath qemu)
+    (lib.makeBinPath [qemu])
   ];
 
   postInstall = ''
