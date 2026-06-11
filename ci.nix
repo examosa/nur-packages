@@ -47,6 +47,6 @@
   cachePkgs = lib.filter isCacheable buildPkgs;
 in {
   inherit buildPkgs cachePkgs;
-  buildOutputs = lib.concatMap outputsOf buildPkgs;
-  cacheOutputs = lib.concatMap outputsOf cachePkgs;
+  buildOutputs = lib.filterAttrs (name: p: lib.isDerivation p && isBuildable p) overlayAttrs;
+  cacheOutputs = lib.filterAttrs (name: p: lib.isDerivation p && isBuildable p && isCacheable p) overlayAttrs;
 }
