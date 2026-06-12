@@ -39,6 +39,8 @@
 
   outputsOf = p: map (o: p.${o}) p.outputs;
 
+  pkgsToAttrs = ps: lib.listToAttrs (map (p: lib.nameValuePair (lib.getName p) p) ps);
+
   overlayAttrs = (import ./overlays).default pkgs pkgs;
 
   nurPkgs = flattenPkgs overlayAttrs;
@@ -47,6 +49,6 @@
   cachePkgs = lib.filter isCacheable buildPkgs;
 in {
   inherit buildPkgs cachePkgs;
-  buildOutputs = lib.filterAttrs (name: p: lib.isDerivation p && isBuildable p) overlayAttrs;
-  cacheOutputs = lib.filterAttrs (name: p: lib.isDerivation p && isBuildable p && isCacheable p) overlayAttrs;
+  buildOutputs = pkgsToAttrs buildPkgs;
+  cacheOutputs = pkgsToAttrs cachePkgs;
 }
