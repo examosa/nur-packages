@@ -37,7 +37,13 @@
   in
     lib.concatMap normalizePkg (lib.attrValues s);
 
-  outputsOf = p: map (o: p.${o}) p.outputs;
+  outputAttrsOf = p:
+    lib.genAttrs' p.outputs (o:
+      lib.nameValuePair
+      "${lib.getName p}-${o}"
+      p.${o});
+
+  concatMapMergeAttrs = f: list: lib.mergeAttrsList (map f list);
 
   overlayAttrs = (import ./overlays).default pkgs pkgs;
 
@@ -47,6 +53,6 @@
   cachePkgs = lib.filter isCacheable buildPkgs;
 in {
   inherit buildPkgs cachePkgs;
-  buildOutputs = lib.concatMap outputsOf buildPkgs;
-  cacheOutputs = lib.concatMap outputsOf cachePkgs;
+  buildOutputs = concatMapMergeAttrs outputAttrsOf buildPkgs;
+  cacheOutputs = concatMapMergeAttrs outputAttrsOf cachePkgs;
 }
