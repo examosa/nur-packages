@@ -47,7 +47,9 @@
         pkgs,
         ...
       }: let
-        legacyPackages = import self {inherit pkgs;};
+        legacyPackages = import self {
+          pkgs = pkgs.extend inputs.emacs-overlay.overlays.emacs;
+        };
       in {
         checks.format = config.treefmt.build.check self;
         inherit legacyPackages;

@@ -8,26 +8,9 @@
 #     nix-build -A mypackage
 {pkgs ? import <nixpkgs> {}}: let
   inherit (pkgs) lib;
-  inherit (pkgs.stdenv.hostPlatform) system;
-
-  flake-compat = let
-    lock = lib.importJSON ./flake.lock;
-    sourceInfo = lock.nodes.flake-compat.locked;
-  in
-    fetchTarball {
-      url =
-        sourceInfo.url
-        or "https://github.com/${sourceInfo.owner}/${sourceInfo.repo}/archive/${sourceInfo.rev}.tar.gz";
-      sha256 = sourceInfo.narHash;
-    };
-
-  self = (import flake-compat {src = ./.;}).outputs;
 
   packages = lib.packagesFromDirectoryRecursive {
-    callPackage = pkgs.newScope {
-      inherit (self.inputs.emacs-overlay.packages.${system}) emacs-unstable;
-    };
-
+    inherit (pkgs) callPackage;
     directory = ./packages;
   };
 in
