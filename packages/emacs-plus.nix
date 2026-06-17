@@ -1,25 +1,25 @@
 {
   emacs,
+  emacs-unstable ? emacs,
   fetchFromGitHub,
   lib,
-  stdenv,
 }: let
   src = fetchFromGitHub {
     owner = "d12frosted";
     repo = "homebrew-emacs-plus";
-    tag = "cask-31-163";
-    hash = "sha256-7kML/eqQ6qqgirrXhALIS/Gt5s10wfS8cO3Y3pn/KJk=";
+    rev = "df3c93cb16f9770e0747adc424a477fb68f026b8";
+    hash = "sha256-OAbS5/rv9dNmtFy/oQVLL4jToYN20YvULk4ox8fvQ5Q=";
   };
+
+  majorVersion = lib.versions.major (lib.getVersion emacs-unstable);
 in
-  emacs.overrideAttrs (oldAttrs: {
+  emacs-unstable.overrideAttrs (oldAttrs: {
     pname = "emacs-plus";
 
     patches =
       oldAttrs.patches
-      ++ map (patch: src + /patches/emacs-30/${patch}.patch) [
-        "fix-macos-tahoe-scrolling"
+      ++ map (patch: src + /patches/emacs-${majorVersion}/${patch}.patch) [
         "fix-ns-x-colors"
-        "fix-window-role"
         "round-undecorated-frame"
         "system-appearance"
       ];
@@ -30,11 +30,6 @@ in
       + ''
         cp ${src}/community/icons/memeplex-wide/icon.icns nextstep/Cocoa/Emacs.base/Contents/Resources/Emacs.icns
       '';
-
-    # https://github.com/nix-community/emacs-overlay/issues/536
-    configureFlags =
-      oldAttrs.configureFlags
-      ++ lib.optionals stdenv.hostPlatform.isDarwin ["ac_cv_prog_cc_c23=no"];
 
     meta = oldAttrs.meta // {platforms = lib.platforms.darwin;};
   })

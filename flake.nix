@@ -2,6 +2,12 @@
   description = "My personal NUR repository";
 
   inputs = {
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    flake-compat.url = "github:NixOS/flake-compat";
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";
     systems.url = "github:nix-systems/default";
