@@ -73,6 +73,9 @@ jobs:
       - name: Build nix packages
         run: nix shell --file '<nixpkgs>' nix-fast-build --command nix-fast-build
           --no-nom --skip-cached --file ci.nix --attr cacheOutputs
+        env:
+          # Avoids ANSI escape codes in job summaries
+          CARGO_TERM_COLOR: never
 
       - name: Trigger NUR update
         if: ${{ false }}
