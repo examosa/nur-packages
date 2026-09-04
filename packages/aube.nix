@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "endevco";
+    owner = "aubepkg";
     repo = "aube";
     tag = "v${finalAttrs.version}";
     hash = "sha256-kVkvVS3xNW/moeRtHxq+sXMrnYOUVn8evIQgGYR2LHc=";
