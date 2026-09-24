@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmakeMinimal,
   installShellFiles,
+  makeBinaryWrapper,
   gitMinimal,
   nodejs-slim,
   cacert,
@@ -32,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     cmakeMinimal
     installShellFiles
+    makeBinaryWrapper
     pkg-config
   ];
 
@@ -40,8 +42,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postPatch = ''
+    # coreutils: unknown program 'native-echo'
+    makeWrapper $(type -P echo) echo
+
     substituteInPlace crates/aube/src/commands/exec.rs \
-      --replace-fail '"/bin/echo"' "\"$(type -P echo)\""
+      --replace-fail '"/bin/echo"' "\"$PWD/echo\""
 
     substituteInPlace crates/aube-lockfile/src/io.rs crates/aube/src/commands/version.rs \
       --replace-fail '"git"' '"${lib.getExe gitMinimal}"'
