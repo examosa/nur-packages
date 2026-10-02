@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://codeberg.org/maandree/exec-as";
     license = lib.licenses.isc;
     mainProgram = "exec-as";
+    maintainers = [lib.maintainers.examosa];
     platforms = lib.platforms.all;
   };
 })

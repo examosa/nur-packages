@@ -44,6 +44,8 @@ buildGoModule (finalAttrs: {
     description = "An independent package manager for compiled binaries";
     homepage = "https://github.com/marwanhawari/stew";
     license = lib.licenses.mit;
+    maintainers = [lib.maintainers.examosa];
     mainProgram = "stew";
+    platforms = lib.platforms.all;
   };
 })

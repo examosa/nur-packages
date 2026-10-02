@@ -21,6 +21,7 @@ in
       description = "User-friendly launchctl wrapper and helper functions";
       homepage = "https://github.com/newtonne/lctl";
       license = lib.licenses.mit;
+      maintainers = [lib.maintainers.examosa];
       mainProgram = "lctl";
       platforms = lib.platforms.darwin;
     };

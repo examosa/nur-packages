@@ -31,5 +31,12 @@ in
         cp ${src}/community/icons/memeplex-wide/icon.icns nextstep/Cocoa/Emacs.base/Contents/Resources/Emacs.icns
       '';
 
-    meta = oldAttrs.meta // {platforms = lib.platforms.darwin;};
+    mainDarwinApp = "Emacs.app";
+
+    meta =
+      oldAttrs.meta
+      // {
+        maintainers = oldAttrs.meta.maintainers ++ [lib.maintainers.examosa];
+        platforms = lib.platforms.darwin;
+      };
   })
