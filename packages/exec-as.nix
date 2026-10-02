@@ -18,7 +18,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-tsga9+MCVjMOLAATAUYbJ/vCCT5tzxwsopx3mbmr1QI=";
   };
 
-  makeFlags = ["CC:=$(CC)" "PREFIX:=$(out)"];
+  buildFlags = ["CC:=$(CC)"];
+
+  installFlags = ["PREFIX:=$(out)"];
 
   passthru.updateScript = nix-update-script {};
 
