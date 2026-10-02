@@ -8,6 +8,9 @@
   version = "2026-06-28";
 in
   runCommand "${pname}-${version}" {
+    strictDeps = true;
+    __structuredAttrs = true;
+
     src = fetchFromGitHub {
       owner = "newtonne";
       repo = "lctl";
