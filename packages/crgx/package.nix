@@ -1,6 +1,5 @@
 {
   fetchFromGitHub,
-  glibc,
   lib,
   nix-update-script,
   rustPlatform,
@@ -23,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace src/config.rs \
-      --replace-fail '"/lib"' '"${lib.makeLibraryPath [glibc]}"'
+      --replace-fail '"/lib"' '"${lib.makeLibraryPath [stdenv.cc.libc]}"'
   '';
 
   passthru.updateScript = nix-update-script {extraArgs = ["--use-github-releases"];};
