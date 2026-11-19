@@ -2,8 +2,10 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
+  pkg-config,
   rustPlatform,
   stdenv,
+  zstd,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "crgx";
@@ -24,6 +26,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace src/config.rs \
       --replace-fail '"/lib"' '"${lib.makeLibraryPath [stdenv.cc.libc]}"'
   '';
+
+  buildInputs = [zstd];
+
+  nativeBuildInputs = [pkg-config];
+
+  env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
   passthru.updateScript = nix-update-script {extraArgs = ["--use-github-releases"];};
 
